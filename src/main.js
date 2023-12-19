@@ -71,8 +71,16 @@ function drawGrid(){
             currentY = currentY - cubeHeight - margin;
 
             const gridBox = new THREE.BoxGeometry( cubeHeight, cubeWidth, 1 );
+
             const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+            material.wireframe = true;
+
             const cube = new THREE.Mesh( gridBox, material );
+
+            cube.material.depthTest = false;
+            cube.material.opacity = 0.15;
+            cube.material.transparent = true;
+
             cube.position.set(currentX,currentY,0);
 
             scene.add( cube );
