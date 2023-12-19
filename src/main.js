@@ -26,11 +26,13 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth,window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+const controls = new OrbitControls( camera, renderer.domElement );
 // Placing a basic geometry at (0,0,0) to make sure things are working. 
 const geometry = new THREE.BoxGeometry( 1, 1, 1 );
 const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 const cube = new THREE.Mesh( geometry, material );
 scene.add( cube );
+scene.add( controls);
 
 camera.position.z = 5;
 
