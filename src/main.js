@@ -3,7 +3,6 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshLine, MeshLineMaterial, MeshLineRaycast } from 'three.meshline';
 
-// const controls = new OrbitControls( camera, renderer.domElement );
 // const loader = new GLTFLoader();
 
 
@@ -26,15 +25,17 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth,window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-const controls = new OrbitControls( camera, renderer.domElement );
-// Placing a basic geometry at (0,0,0) to make sure things are working. 
-const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
-scene.add( controls);
+camera.position.z = 25;
 
-camera.position.z = 5;
+const controls = new OrbitControls( camera, renderer.domElement );
+
+
+
+
+
+
+
+
 
 
 function animate(){
@@ -44,3 +45,47 @@ function animate(){
 }
 
 animate();
+
+drawGrid();
+
+
+function drawGrid(){
+    const numColumns = 52;
+    const numRows = 7; // Days of the week
+
+    const cubeHeight = 0.5;
+    const cubeWidth =  0.5;
+    const margin = 0.2;
+
+    const startingX = 0;
+    const startingY = numRows * (cubeHeight * margin);
+
+    let currentX = startingX;
+    let currentY = startingY;
+    for(let currentColumn = 0; currentColumn < numColumns; currentColumn++){
+        currentX = currentX + cubeWidth + margin;
+        currentY = startingY;
+
+        for(let currentRow = 0; currentRow < numRows; currentRow++){
+
+            currentY = currentY - cubeHeight - margin;
+
+            const gridBox = new THREE.BoxGeometry( cubeHeight, cubeWidth, 1 );
+            const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+            const cube = new THREE.Mesh( gridBox, material );
+            cube.position.set(currentX,currentY,0);
+
+            scene.add( cube );
+        }
+    }
+
+    camera.position.x = currentX / 2;
+
+    // Making sure the orbit controls work correctly
+    // instead of being reset when the user interacts.
+    controls.target.x = currentX / 2;
+    controls.target.y = currentY / 2;
+    controls.target.z = 0;
+
+
+}
